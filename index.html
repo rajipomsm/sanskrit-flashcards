@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>अव्यय, शब्दसङ्ग्रह एवं धातुसङ्ग्रह — Flashcards</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&family=Noto+Sans+Gujarati:wght@400;600&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --paper: #EDE3CE;
+    --paper-dark: #E0D2AE;
+    --paper-edge: #D8C69C;
+    --ink: #2A2015;
+    --ink-soft: #574A38;
+    --maroon: #7C2331;
+    --maroon-soft: #9A4152;
+    --teal: #1E4A42;
+    --gold: #A97B1F;
+    --thread: #B99B57;
+    --leaf: #3E7A5D;
+    --wrong: #A83B33;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--paper-dark);
+    color: var(--ink);
+    font-family: 'Crimson Pro', serif;
+    min-height: 100vh;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(122,35,49,0.05), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(30,74,66,0.06), transparent 45%),
+      repeating-linear-gradient(0deg, rgba(90,70,40,0.025) 0px, rgba(90,70,40,0.025) 1px, transparent 1px, transparent 3px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 60px;
+  }
+
+  .wrap { width: 100%; max-width: 640px; }
+
+  header { text-align: center; margin-bottom: 22px; }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--maroon);
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-family: 'Tiro Devanagari Sanskrit', serif;
+    font-size: 42px;
+    margin: 0 0 2px;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .subtitle { font-style: italic; color: var(--ink-soft); font-size: 15px; }
+
+  .brush-rule {
+    width: 140px;
+    height: 6px;
+    margin: 14px auto 0;
+    background: linear-gradient(90deg, transparent, var(--maroon) 20%, var(--gold) 50%, var(--maroon) 80%, transparent);
+    -webkit-mask: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+    mask: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+    opacity: 0.8;
+    border-radius: 3px;
+  }
+
+  /* Mode toggle */
+  .mode-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 22px 0 14px;
+  }
+  .mode-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.05em;
+    padding: 8px 18px;
+    border: 1px solid var(--paper-edge);
+    background: var(--paper);
+    color: var(--ink-soft);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .mode-btn.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+  /* Deck selector */
+  .decks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin: 0 0 18px;
+  }
+
+  .deck-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    padding: 7px 13px;
+    border: 1px solid var(--paper-edge);
+    background: var(--paper);
+    color: var(--ink-soft);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .deck-chip:hover { border-color: var(--maroon-soft); color: var(--maroon); }
+  .deck-chip.active { background: var(--maroon); border-color: var(--maroon); color: var(--paper); }
+
+  /* Progress */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
+  .progress-track {
+    height: 3px;
+    background: var(--paper-edge);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--maroon), var(--gold));
+    transition: width 0.25s ease;
+  }
+
+  /* ============ STUDY MODE (flip card) ============ */
+  .stage { perspective: 1400px; margin-bottom: 22px; }
+
+  .card {
+    position: relative;
+    width: 100%;
+    height: 330px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(.4,.2,.2,1);
+  }
+  .card.flipped { transform: rotateY(180deg); }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 4px;
+    background: var(--paper);
+    border: 1px solid var(--paper-edge);
+    box-shadow: 0 8px 24px rgba(42,32,21,0.18), 0 1px 0 rgba(255,255,255,0.4) inset;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .face::before, .face::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--paper-dark);
+    box-shadow: inset 0 0 0 1px var(--thread), inset 0 2px 3px rgba(0,0,0,0.15);
+    transform: translateY(-50%);
+  }
+  .face::before { left: 14px; }
+  .face::after { right: 14px; }
+
+  .face .deck-label {
+    position: absolute;
+    top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    opacity: 0.6;
+  }
+
+  .speak-btn {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--paper-edge);
+    background: var(--paper-dark);
+    color: var(--teal);
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    z-index: 5;
+  }
+  .speak-btn:hover { background: var(--teal); color: var(--paper); border-color: var(--teal); transform: scale(1.08); }
+  .speak-btn:active { transform: scale(0.95); }
+  .speak-btn.speaking { background: var(--maroon); border-color: var(--maroon); color: var(--paper); animation: pulse-speak 0.9s ease-in-out infinite; }
+  @keyframes pulse-speak { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+
+  .front .root { font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 76px; color: var(--ink); line-height: 1; }
+  .front .root-alt { font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 24px; color: var(--maroon-soft); margin-top: 6px; }
+  .front .pron { font-family: 'Crimson Pro', serif; font-style: italic; font-size: 17px; color: var(--ink-soft); margin-top: 8px; letter-spacing: 0.02em; }
+  .front .hint { margin-top: 18px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-soft); opacity: 0.55; letter-spacing: 0.05em; }
+
+  .back { transform: rotateY(180deg); background: var(--paper); }
+  .back .verb { font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 40px; color: var(--teal); margin-bottom: 4px; }
+  .back .verb-pron { font-family: 'Crimson Pro', serif; font-style: italic; font-size: 15px; color: var(--ink-soft); opacity: 0.8; margin-bottom: 14px; }
+  .back .guj { font-family: 'Noto Sans Gujarati', serif; font-size: 22px; color: var(--maroon); font-weight: 600; margin-bottom: 10px; }
+  .back .eng { font-size: 22px; font-style: italic; color: var(--ink); }
+  .back .divider { width: 40px; height: 2px; background: var(--thread); margin: 12px auto; opacity: 0.6; }
+
+  .controls { display: flex; align-items: center; justify-content: center; gap: 14px; }
+
+  .ctrl-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 10px 16px;
+    background: var(--paper);
+    border: 1px solid var(--paper-edge);
+    color: var(--ink);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .ctrl-btn:hover { border-color: var(--maroon-soft); color: var(--maroon); }
+  .ctrl-btn:active { transform: translateY(1px); }
+  .ctrl-btn.primary { background: var(--teal); border-color: var(--teal); color: var(--paper); }
+  .ctrl-btn.primary:hover { background: var(--maroon); border-color: var(--maroon); color: var(--paper); }
+  .ctrl-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .keys-hint { text-align: center; margin-top: 18px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-soft); opacity: 0.55; letter-spacing: 0.02em; }
+
+  /* ============ SPRINT MODE (quiz game) ============ */
+  .sprint-stats {
+    display: flex;
+    justify-content: center;
+    gap: 26px;
+    margin-bottom: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+  .sprint-stats b { display: block; font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 20px; color: var(--maroon); }
+
+  .timer-track { height: 4px; background: var(--paper-edge); border-radius: 3px; overflow: hidden; margin-bottom: 18px; }
+  .timer-fill { height: 100%; background: linear-gradient(90deg, var(--leaf), var(--gold)); width: 100%; }
+
+  .sprint-card {
+    background: var(--paper);
+    border: 1px solid var(--paper-edge);
+    border-radius: 4px;
+    padding: 40px 22px;
+    text-align: center;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 24px rgba(42,32,21,0.18);
+  }
+  .sprint-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-soft); opacity: 0.6; margin-bottom: 14px; }
+  .sprint-word { font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 54px; color: var(--ink); line-height: 1.15; }
+  .sprint-pron { font-family: 'Crimson Pro', serif; font-style: italic; font-size: 15px; color: var(--ink-soft); margin-top: 8px; }
+
+  .sprint-answers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .sprint-answer-btn {
+    background: var(--paper);
+    border: 1px solid var(--paper-edge);
+    color: var(--ink);
+    border-radius: 4px;
+    padding: 15px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.12s ease, border-color 0.2s ease, background 0.2s ease;
+    font-family: 'Noto Sans Gujarati', 'Crimson Pro', serif;
+  }
+  .sprint-answer-btn:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .sprint-answer-btn.correct { background: rgba(62,122,93,0.18); border-color: var(--leaf); }
+  .sprint-answer-btn.wrong { background: rgba(168,59,51,0.18); border-color: var(--wrong); }
+  .sprint-answer-btn:disabled { cursor: default; }
+
+  .lang-toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; }
+  .lang-toggle button {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    padding: 6px 14px;
+    border: 1px solid var(--paper-edge);
+    background: transparent;
+    color: var(--ink-soft);
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .lang-toggle button.active { background: var(--gold); border-color: var(--gold); color: var(--paper); }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 34px; }
+    .card { height: 300px; }
+    .front .root { font-size: 60px; }
+    .sprint-word { font-size: 42px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Sanskrit Vocabulary &amp; Verb Roots</div>
+    <h1>अव्यय · शब्दसङ्ग्रह · धातुसङ्ग्रह</h1>
+    <div class="subtitle">Avyaya, Shabdasangrah &amp; Dhātu — Gujarati &amp; English meanings</div>
+    <div class="brush-rule"></div>
+  </header>
+
+  <div class="mode-row">
+    <button class="mode-btn active" id="studyModeBtn">Study</button>
+    <button class="mode-btn" id="sprintModeBtn">Sprint (Game)</button>
+  </div>
+
+  <div class="decks" id="decks"></div>
+
+  <!-- ============ STUDY MODE ============ -->
+  <div id="studyView">
+    <div class="progress-row">
+      <span id="deckName">Avyaya</span>
+      <span id="progressText">1 / 125</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="stage">
+      <div class="card" id="card">
+        <div class="face front">
+          <span class="deck-label" id="frontLabel">Avyaya</span>
+          <button class="speak-btn" id="speakFrontBtn" type="button" aria-label="Play pronunciation" title="Play pronunciation">🔊</button>
+          <div class="root" id="rootText">अग्रे</div>
+          <div class="root-alt" id="rootAlt"></div>
+          <div class="pron" id="pronText">agre</div>
+          <div class="hint">tap card to reveal meaning</div>
+        </div>
+        <div class="face back">
+          <button class="speak-btn" id="speakBackBtn" type="button" aria-label="Play pronunciation" title="Play pronunciation" style="display:none">🔊</button>
+          <div class="verb" id="verbText" style="display:none"></div>
+          <div class="verb-pron" id="verbPronText" style="display:none"></div>
+          <div class="divider" id="verbDivider" style="display:none"></div>
+          <div class="guj" id="gujText">આગળ</div>
+          <div class="eng" id="engText">ahead / in front</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="ctrl-btn" id="prevBtn">← Prev</button>
+      <button class="ctrl-btn primary" id="flipBtn">Flip</button>
+      <button class="ctrl-btn" id="shuffleBtn">Shuffle</button>
+      <button class="ctrl-btn" id="nextBtn">Next →</button>
+    </div>
+
+    <div class="keys-hint">space / click to flip &nbsp;·&nbsp; ← → to navigate &nbsp;·&nbsp; s to shuffle &nbsp;·&nbsp; p or 🔊 to hear it</div>
+  </div>
+
+  <!-- ============ SPRINT MODE ============ -->
+  <div id="sprintView" class="hidden">
+    <div class="lang-toggle" id="langToggle">
+      <button data-lang="guj" class="active">→ ગુજરાતી</button>
+      <button data-lang="eng">→ English</button>
+    </div>
+
+    <div class="sprint-stats">
+      <div>Score <b id="sprintScore">0</b></div>
+      <div>Streak <b id="sprintStreak">0</b></div>
+      <div>Best <b id="sprintBest">0</b></div>
+    </div>
+
+    <div class="timer-track"><div class="timer-fill" id="sprintTimerFill"></div></div>
+
+    <div class="sprint-card">
+      <div class="sprint-label" id="sprintDeckLabel">Avyaya — what does this mean?</div>
+      <div class="sprint-word" id="sprintWord">अग्रे</div>
+      <div class="sprint-pron" id="sprintPron">agre</div>
+    </div>
+
+    <div class="sprint-answers" id="sprintAnswers"></div>
+  </div>
+</div>
+
+<script>
+const DATA = {
+  "Avyaya": [
+    ["अग्रे","","","આગળ","ahead / in front","agre","",""],
+    ["अवश्यम्","","","ચોક્કસ","certainly","avaśyam","",""],
+    ["अथवा","","","અથવા","or","athavā","",""],
+    ["अत्र","","","અહીં","here","atra","",""],
+    ["अरे","","","આશ્ચર્ય-ઉદ્‌ગાર","exclamation of surprise","are","",""],
+    ["तत्र","","","ત્યાં","there","tatra","",""],
+    ["अन्यत्र","","","બીજે સ્થળે","elsewhere","anyatra","",""],
+    ["अपि","","","પણ","also","api","",""],
+    ["अतीव","","","અતિશય","extremely","atīva","",""],
+    ["एव","","","જ","indeed / only","eva","",""],
+    ["किन्तु","","","પરંતુ","but","kintu","",""],
+    ["कदापि","","","ક્યારેક, ક્યારેય","sometimes / ever","kadāpi","",""],
+    ["कदा","","","ક્યારે?","when?","kadā","",""],
+    ["कुत्र","","","ક્યાં?","where?","kutra","",""],
+    ["च","","","અને","and","ca","",""],
+    ["तथा","","","તે રીતે","in that way / likewise","tathā","",""],
+    ["न","","","નહીં","not","na","",""],
+    ["पुनः","","","ફરી વાર","again","punaḥ","",""],
+    ["प्रायः / बहुधा","","","ઘણી રીતે, મોટે ભાગે, ઘણું કરીને","mostly / often","prāyaḥ / bahudhā","",""],
+    ["मिथ्या","","","ખોટું, વ્યર્થ","falsely / in vain","mithyā","",""],
+    ["यथा","","","જે રીતે","as / in the way that","yathā","",""],
+    ["यत्र","","","જ્યાં","where","yatra","",""],
+    ["हि","","","ખરેખર","indeed / certainly","hi","",""],
+    ["वा","","","અથવા","or","vā","",""],
+    ["सर्वदा","","","હંમેશા","always","sarvadā","",""],
+    ["सर्वत्र","","","બધે જ","everywhere","sarvatra","",""],
+    ["सम्यक्","","","સર્વ પ્રકારે","properly / in every way","samyak","",""],
+    ["सदा","","","હંમેશા","always","sadā","",""],
+    ["समीपे","","","પાસે, બાજુમાં","near / beside","samīpe","",""],
+    ["स्वयम्","","","પોતે","oneself / by oneself","svayam","",""],
+    ["नित्यम्","","","હંમેશા","always","nityam","",""],
+    ["प्रतिदिनम्","","","દરરોજ","daily / every day","pratidinam","",""],
+    ["अद्य","","","આજે","today","adya","",""],
+    ["अग्रतः","","","આગળ","ahead / in front","agrataḥ","",""],
+    ["अधः","","","નીચે","below","adhaḥ","",""],
+    ["अजस्रम्","","","સતત","continuously / constantly","ajasram","",""],
+    ["अधः अधः","","","બરાબર નીચે","exactly below","adhaḥ adhaḥ","",""],
+    ["अतः","","","એટલા માટે","therefore","ataḥ","",""],
+    ["अथ","","","હવે","now","atha","",""],
+    ["अत्रान्तरे","","","એટલામાં","in the meantime","atrāntare","",""],
+    ["अथकिम्","","","હા","yes, of course","athakim","",""],
+    ["अन्तः","","","અંદર, માં","inside / within","antaḥ","",""],
+    ["अधस्तात्","","","નીચે","below / underneath","adhastāt","",""],
+    ["अन्ततः","","","છેલ્લે","finally / at last","antataḥ","",""],
+    ["अधुना","","","હમણાં","now","adhunā","",""],
+    ["अन्तरे","","","અંદર, માં","inside / within","antare","",""],
+    ["अनन्तरम्","","","પછી","after / afterwards","anantaram","",""],
+    ["अन्तिकम्","","","નજીક, સમીપ","near / close","antikam","",""],
+    ["अन्तरेण","","","વિના, સિવાય","without / except","antareṇa","",""],
+    ["अन्तरा","","","ની વચ્ચે","between","antarā","",""],
+    ["अभितः","","","ચારે બાજુ","all around","abhitaḥ","",""],
+    ["अलम्","","","બસ થવું, બસ કરો","enough! / stop it","alam","",""],
+    ["आ","","","ત્યાંથી, ત્યાં સુધી, પર્યંત","up to / until","ā","",""],
+    ["आम्","","","હા, એમ જ","yes, indeed","ām","",""],
+    ["आरात्","","","પાસે","near","ārāt","",""],
+    ["इति","","","આ રીતે, આ પ્રકારે","thus / in this way","iti","",""],
+    ["इतस्ततः","","","અહીં તહીં","here and there","itastataḥ","",""],
+    ["इदानीम्","","","હમણાં, અત્યારે","now, at present","idānīm","",""],
+    ["इत्थम्","","","આ રીતે, આમ","thus / in this manner","ittham","",""],
+    ["इह","","","અહીં","here","iha","",""],
+    ["उपरि","","","ઉપર","above","upari","",""],
+    ["उपरि उपरि","","","બરાબર ઉપર","exactly above","upari upari","",""],
+    ["उभयतः","","","બંને બાજુ","on both sides","ubhayataḥ","",""],
+    ["ऋते","","","વિના","without","ṛte","",""],
+    ["कृतम्","","","બસ થવું, બસ કરો","enough! / stop it","kṛtam","",""],
+    ["कथम्","","","કેવી રીતે","how","katham","",""],
+    ["किल","","","ખરેખર, કહેવાય છે","indeed / it is said","kila","",""],
+    ["कदापि","","","ક્યારેક, ક્યારેય","sometimes / ever","kadāpi","",""],
+    ["कृते","","","તેને માટે","for the sake of","kṛte","",""],
+    ["खलु","","","ખરેખર","indeed / certainly","khalu","",""],
+    ["चेत्","","","જો","if","cet","",""],
+    ["झटिति","","","જલદી, ઝટ","quickly / at once","jhaṭiti","",""],
+    ["तदा","","","ત્યારે, તે સમયે","then, at that time","tadā","",""],
+    ["तस्मात्","","","તેથી","therefore","tasmāt","",""],
+    ["तूष्णीम्","","","ચૂપચાપ","silently","tūṣṇīm","",""],
+    ["दक्षिणतः","","","જમણી બાજુ","to the right","dakṣiṇataḥ","",""],
+    ["दिष्ट्या","","","સદ્‌ભાગ્યે","fortunately","diṣṭyā","",""],
+    ["दूरे","","","દૂર","far","dūre","",""],
+    ["धिक्","","","ધિક્કાર","shame! / fie!","dhik","",""],
+    ["नितराम्","","","અત્યંત","exceedingly","nitarām","",""],
+    ["नमः","","","નમસ્કાર","salutation","namaḥ","",""],
+    ["निकषा","","","બાજુમાં, સમીપમાં","near / beside","nikaṣā","",""],
+    ["परम्","","","પછી","after / later","param","",""],
+    ["परितः","","","ચારે બાજુ","all around","paritaḥ","",""],
+    ["पश्चात्","","","પછી","afterwards","paścāt","",""],
+    ["पार्श्वम्","","","ચારે બાજુ","beside / around","pārśvam","",""],
+    ["पुरा","","","પહેલા","formerly / before","purā","",""],
+    ["पुरः","","","આગળ, સામે, સમક્ષ","ahead, in front, before","puraḥ","",""],
+    ["पुरतः","","","આગળ, સામે","ahead / in front","purataḥ","",""],
+    ["प्रति","","","ની તરફ","towards","prati","",""],
+    ["पुरस्तात्","","","સામે","in front of","purastāt","",""],
+    ["प्राक्","","","પહેલાં","before / previously","prāk","",""],
+    ["पृथक्","","","અલગ","separately","pṛthak","",""],
+    ["पृष्ठतः","","","પાછળથી","from behind","pṛṣṭhataḥ","",""],
+    ["प्रभृति","","","થી માંડીને","starting from","prabhṛti","",""],
+    ["बहिः","","","બહાર","outside","bahiḥ","",""],
+    ["भृशम्","","","અત્યંત, ખૂબ","extremely / very much","bhṛśam","",""],
+    ["मुहुः","","","વારંવાર","repeatedly","muhuḥ","",""],
+    ["मध्ये","","","ની વચ્ચે","in the middle of / among","madhye","",""],
+    ["मृषा","","","ખોટું, વ્યર્થ","falsely / in vain","mṛṣā","",""],
+    ["यदा","","","જ્યારે","when","yadā","",""],
+    ["यत्","","","જે","which / that","yat","",""],
+    ["युगपत्","","","એક સાથે","simultaneously","yugapat","",""],
+    ["रहसि","","","એકાંતમાં","in private / secretly","rahasi","",""],
+    ["वामतः","","","ડાબી બાજુ","to the left","vāmataḥ","",""],
+    ["विना","","","વગર, સિવાય","without / except","vinā","",""],
+    ["शनैः","","","ધીરેથી","slowly","śanaiḥ","",""],
+    ["शीघ्रम्","","","જલદી","quickly","śīghram","",""],
+    ["श्वः","","","આવતી કાલે","tomorrow","śvaḥ","",""],
+    ["समम्","","","સાથે","together with","samam","",""],
+    ["सकाशम्","","","બાજુમાં, નજીક, પાસે","near, close by","sakāśam","",""],
+    ["सकाशात्","","","પાસેથી","from near","sakāśāt","",""],
+    ["समक्षम्","","","સન્મુખ","in front of / facing","samakṣam","",""],
+    ["सम्प्रति","","","હાલ","currently / now","samprati","",""],
+    ["समया","","","સમીપમાં","near","samayā","",""],
+    ["समीचीनम्","","","યોગ્ય, ઠીક","proper / correct","samīcīnam","",""],
+    ["साकम्","","","સાથે","together","sākam","",""],
+    ["सह","","","સાથે","with","saha","",""],
+    ["सार्धम्","","","સાથે","along with","sārdham","",""],
+    ["सम्मुखम्","","","સમક્ષ","in front of","sammukham","",""],
+    ["सुष्ठु","","","સરસ, સારી રીતે","nicely / well","suṣṭhu","",""],
+    ["सर्वतः","","","બધી બાજુ","from all sides","sarvataḥ","",""],
+    ["स्वस्ति","","","કલ્યાણ","well-being / blessing","svasti","",""],
+    ["स्वैरम्","","","ઇચ્છાનુસાર","at will / freely","svairam","",""],
+    ["ह्यः","","","ગઈ કાલે","yesterday","hyaḥ","",""]
+  ],
+  "Shabdasangrah": [
+    ["अश्वः","","","ઘોડો","horse","aśvaḥ","",""],
+    ["उद्देशः","","","હેતુ","purpose / intent","uddeśaḥ","",""],
+    ["कुम्भः","","","ઘડો","pot / pitcher","kumbhaḥ","",""],
+    ["गजः","","","હાથી","elephant","gajaḥ","",""],
+    ["दीपः","","","દીવો","lamp","dīpaḥ","",""],
+    ["बालः","","","બાળક","child","bālaḥ","",""],
+    ["भूपः","","","રાજા","king","bhūpaḥ","",""],
+    ["यवनः","","","મુસ્લિમ","Muslim / foreigner","yavanaḥ","",""],
+    ["संन्यासः","","","ત્યાગ","renunciation","saṃnyāsaḥ","",""],
+    ["ईशः","","","ભગવાન","God / Lord","īśaḥ","",""],
+    ["कलशः","","","ઘડો","pitcher / pot","kalaśaḥ","",""],
+    ["केशः","","","વાળ","hair","keśaḥ","",""],
+    ["गणः","","","સમૂહ","group / collection","gaṇaḥ","",""],
+    ["तापसः","","","તપસ્વી","ascetic","tāpasaḥ","",""],
+    ["दूतः","","","દૂત","messenger","dūtaḥ","",""],
+    ["भवः","","","સંસાર","world / existence","bhavaḥ","",""],
+    ["यागः","","","યજ્ઞ","sacrifice","yāgaḥ","",""],
+    ["स्वस्तिकः","","","સાથિયો","swastika (auspicious mark)","svastikaḥ","",""],
+    ["अजः","","","બકરો","goat","ajaḥ","",""],
+    ["अनिलः","","","પવન","wind","anilaḥ","",""],
+    ["आतपः","","","તડકો","sunlight / heat","ātapaḥ","",""],
+    ["आयः","","","આવક","income","āyaḥ","",""],
+    ["कन्दुकः","","","દડો","ball","kandukaḥ","",""],
+    ["कीटः","","","કીડો","insect","kīṭaḥ","",""],
+    ["घटः","","","ઘડો","pot","ghaṭaḥ","",""],
+    ["धूमः","","","ધુમાડો","smoke","dhūmaḥ","",""],
+    ["मोदः","","","આનંદ","joy","modaḥ","",""],
+    ["व्ययः","","","જાવક","expense / expenditure","vyayaḥ","",""],
+    ["यवः","","","જવ","barley","yavaḥ","",""],
+    ["उपाहारः","","","નાસ્તો","snack","upāhāraḥ","",""],
+    ["खरः","","","ગધેડો","donkey","kharaḥ","",""],
+    ["दर्पणः","","","અરીસો","mirror","darpaṇaḥ","",""],
+    ["नरः","","","માણસ","man","naraḥ","",""],
+    ["पाषाणः","","","પથ્થર","stone","pāṣāṇaḥ","",""],
+    ["अनलः","","","અગ્નિ","fire","analaḥ","",""],
+    ["अमात्यः","","","મંત્રી","minister","amātyaḥ","",""],
+    ["आम्रः","","","આંબો","mango tree","āmraḥ","",""],
+    ["उद्यमः","","","પ્રયત્ન","effort","udyamaḥ","",""],
+    ["कपोतः","","","કબૂતર","pigeon","kapotaḥ","",""],
+    ["कुञ्जरः","","","હાથી","elephant","kuñjaraḥ","",""],
+    ["कूपः","","","કૂવો","well","kūpaḥ","",""],
+    ["कोटः","","","કિલ્લો","fort","koṭaḥ","",""],
+    ["खगः","","","પંખી","bird","khagaḥ","",""],
+    ["द्विजः","","","બ્રાહ્મણ","Brahmin","dvijaḥ","",""],
+    ["मत्स्यः","","","માછલું","fish","matsyaḥ","",""],
+    ["अमरः","","","દેવ","god / immortal","amaraḥ","",""],
+    ["किङ्करः","","","સેવક","servant","kiṅkaraḥ","",""],
+    ["छात्रः","","","વિદ્યાર્થી","student","chātraḥ","",""],
+    ["पुरस्कारः","","","પુરસ્કાર","award / prize","puraskāraḥ","",""],
+    ["प्रणवः","","","ॐ","the syllable Om","praṇavaḥ","",""],
+    ["प्रणयः","","","સ્નેહ","affection / love","praṇayaḥ","",""],
+    ["प्रसादः","","","પ્રસાદ","grace / blessed offering","prasādaḥ","",""],
+    ["रङ्गः","","","વર્ણ","color","raṅgaḥ","",""],
+    ["वर्णः","","","રંગ","color / caste","varṇaḥ","",""],
+    ["सर्पः","","","સાપ","snake","sarpaḥ","",""],
+    ["अन्तरायः","","","અવરોધ","obstacle","antarāyaḥ","",""],
+    ["उपचारः","","","ઉપચાર","treatment / remedy","upacāraḥ","",""],
+    ["प्रासादः","","","મહેલ","palace","prāsādaḥ","",""],
+    ["समीरः","","","વાયુ","wind / air","samīraḥ","",""],
+    ["उपद्रवः","","","ઉપદ્રવ","disturbance / mischief","upadravaḥ","",""],
+    ["दर्भः","","","દાભડો","sacred grass (darbha)","darbhaḥ","",""],
+    ["रागः","","","વર્ણ, રંગ","color / melody / passion","rāgaḥ","",""],
+    ["विरामः","","","વિરામ","pause / rest","virāmaḥ","",""],
+    ["गर्दभः","","","ગધેડો","donkey","gardabhaḥ","",""],
+    ["वेशः","","","પોશાક","attire / costume","veśaḥ","",""],
+    ["व्यूहः","","","વ્યૂહ","formation / array","vyūhaḥ","",""],
+    ["उपहारः","","","ભેટ","gift","upahāraḥ","",""],
+    ["कम्बलः","","","ધાબળો","blanket","kambalaḥ","",""],
+    ["पुञ्जः","","","ઢગલો","heap / pile","puñjaḥ","",""],
+    ["कोणः","","","ખૂણો","corner / angle","koṇaḥ","",""],
+    ["कोकिलः","","","કોયલ","cuckoo","kokilaḥ","",""],
+    ["प्रातःकालः","","","સવાર","morning","prātaḥkālaḥ","",""],
+    ["विप्रः","","","બ્રાહ્મણ","Brahmin","vipraḥ","",""],
+    ["सुरः","","","દેવ","god","suraḥ","",""],
+    ["अर्कः","","","સૂર્ય","sun","arkaḥ","",""],
+    ["करः","","","હાથ","hand","karaḥ","",""],
+    ["ऋषभः","","","બળદ","bull","ṛṣabhaḥ","",""],
+    ["कर्दमः","","","કીચડ","mud","kardamaḥ","",""],
+    ["तुषारः","","","બરફ","snow / frost","tuṣāraḥ","",""],
+    ["मरालः","","","હંસ","swan","marālaḥ","",""],
+    ["मञ्चः","","","માંચડો","platform / stage","mañcaḥ","",""],
+    ["परामर्शः","","","વિમર્શ","consultation","parāmarśaḥ","",""],
+    ["विषादः","","","ખેદ","sorrow","viṣādaḥ","",""],
+    ["सूरः","","","સૂર્ય","sun","sūraḥ","",""],
+    ["व्ययः","","","ખર્ચ","expense","vyayaḥ","",""],
+    ["गुच्छः","","","ગુચ્છો","bunch / cluster","gucchaḥ","",""],
+    ["सचिवः","","","મંત્રી","minister","sacivaḥ","",""],
+    ["कलापः","","","સમૂહ","collection / group","kalāpaḥ","",""],
+    ["पादपः","","","છોડ","plant / tree","pādapaḥ","",""],
+    ["कुशः","","","દર્ભ","kusha grass","kuśaḥ","",""],
+    ["निदाघः","","","ઉનાળો","summer","nidāghaḥ","",""]
+  ],
+  "List 1": [
+    ["अट्","","अटति","ભટકવું","to wander","aṭ","","aṭati"],
+    ["अव्","","अवति","રક્ષવું","to protect","av","","avati"],
+    ["खाद्","","खादति","જમવું","to eat","khād","","khādati"],
+    ["गल्","","गलति","ગળવું","to melt","gal","","galati"],
+    ["गद्","","गदति","સ્પષ્ટ બોલવું","to speak clearly","gad","","gadati"],
+    ["चर्","","चरति","ચરવું","to graze / move","car","","carati"],
+    ["चल्","","चलति","ચાલવું","to move / walk","cal","","calati"],
+    ["जप्","","जपति","જપવું","to chant","jap","","japati"],
+    ["जम्","","जमति","જમવું","to eat","jam","","jamati"],
+    ["तप्","","तपति","તપવું","to burn / do austerity","tap","","tapati"],
+    ["त्यज्","","त्यजति","ત્યજવું","to abandon","tyaj","","tyajati"],
+    ["दह्","","दहति","બળવું, બાળવું","to burn","dah","","dahati"],
+    ["नम्","","नमति","નમવું","to bow","nam","","namati"],
+    ["पत्","","पतति","પડવું","to fall","pat","","patati"],
+    ["पठ्","","पठति","ભણવું","to study / recite","paṭh","","paṭhati"],
+    ["फल्","","फलति","ફળવું","to bear fruit","phal","","phalati"],
+    ["भण्","","भणति","બોલવું","to speak","bhaṇ","","bhaṇati"],
+    ["रट्","","रटति","રટણ કરવું","to recite / repeat","raṭ","","raṭati"],
+    ["लग्","","लगति","લાગવું","to be attached / feel","lag","","lagati"],
+    ["लप्","","लपति","બોલવું / પ્રલાપ","to speak / prattle","lap","","lapati"],
+    ["व्रज्","","व्रजति","જવું","to go","vraj","","vrajati"],
+    ["वम्","","वमति","ઉલ્ટી કરવી","to vomit","vam","","vamati"]
+  ],
+  "List 2": [
+    ["वस्","","वसति","વસવું","to dwell / live","vas","","vasati"],
+    ["वद्","","वदति","બોલવું","to speak","vad","","vadati"],
+    ["हस्","","हसति","હસવું","to laugh","has","","hasati"],
+    ["भ्रम्","","भ्रमति","ભમવું, ભટકવું","to wander / roam","bhram","","bhramati"],
+    ["ज्वल्","","ज्वलति","સળગવું","to burn / blaze","jval","","jvalati"]
+  ],
+  "List 3": [
+    ["चित्","(चेत)","चेतति","જાણવું","to know","cit","(ceta)","cetati"],
+    ["मिह्","(मेह)","मेहति","સિંચવું, છાંટવું","to sprinkle / moisten","mih","(meha)","mehati"],
+    ["विष्","(विष)","वेषति","સિંચવું, છાંટવું","to sprinkle","viṣ","(viṣa)","veṣati"],
+    ["सिध्","(सेध)","सेधति","જવું, બોલાવવું","to go / to summon","sidh","(sedha)","sedhati"],
+    ["क्रुश्","(क्रोश)","क्रोशति","આહ્વાન કરવું, રડવું","to call out / to cry","kruś","(krośa)","krośati"],
+    ["घुष्","(घोष)","घोषति","જાહેર કરવું","to proclaim","ghuṣ","(ghoṣa)","ghoṣati"],
+    ["पुष्","(पोष)","पोषति","પુષ્ટ થવું","to nourish / thrive","puṣ","(poṣa)","poṣati"],
+    ["बुध्","(बोध)","बोधति","જાણવું","to know / understand","budh","(bodha)","bodhati"],
+    ["रुह्","(रोह)","रोहति","ઊગવું","to sprout / grow","ruh","(roha)","rohati"],
+    ["शुच्","(शोच)","शोचति","શોક કરવો","to grieve","śuc","(śoca)","śocati"],
+    ["कृष्","(कर्ष)","कर्षति","ખેંચવું","to pull / plow","kṛṣ","(karṣa)","karṣati"],
+    ["घृष्","(घर्ष)","घर्षति","ઘસવું","to rub","ghṛṣ","(gharṣa)","gharṣati"],
+    ["वृष्","(वर्ष)","वर्षति","વરસવું","to rain","vṛṣ","(varṣa)","varṣati"],
+    ["सृप्","(सर्प)","सर्पति","જવું, સરકવું","to creep / crawl","sṛp","(sarpa)","sarpati"]
+  ],
+  "List 4": [
+    ["क्रीड्","","क्रीडति","રમવું, વિહરવું","to play / roam","krīḍ","","krīḍati"],
+    ["चूष्","","चूषति","પીવું, યૂસવું","to drink / suck","cūṣ","","cūṣati"],
+    ["जीव्","","जीवति","જીવવું","to live","jīv","","jīvati"],
+    ["मील्","","मीलति","આંખ બંધ થવી, મળવું","to close eyes / meet","mīl","","mīlati"],
+    ["भूष्","","भूषति","શણગારવું","to decorate","bhūṣ","","bhūṣati"],
+    ["कूज्","","कूजति","કૂજવું","to coo / chirp","kūj","","kūjati"]
+  ],
+  "List 5": [
+    ["अर्ज्","","अर्जति","મેળવવું, કમાવવું","to obtain / earn","arj","","arjati"],
+    ["अर्ह्","","अर्हति","યોગ્ય થવું","to be worthy","arh","","arhati"],
+    ["अर्च्","","अर्चति","પૂજવું","to worship","arc","","arcati"],
+    ["कुण्ठ्","","कुण्ठति","બુઠું થવું","to become blunt","kuṇṭh","","kuṇṭhati"],
+    ["क्रन्द्","","क्रन्दति","રડવું","to cry / weep","krand","","krandati"],
+    ["काङ्क्ष्","","काङ्क्षति","ઇચ્છવું","to desire / wish","kāṅkṣ","","kāṅkṣati"],
+    ["गर्ज्","","गर्जति","ગર્જવું","to roar","garj","","garjati"],
+    ["गुञ्ज्","","गुञ्जति","ગુંજવું","to hum / buzz","guñj","","guñjati"],
+    ["नन्द्","","नन्दति","આનંદ પામવો","to feel joy","nand","","nandati"],
+    ["निन्द्","","निन्दति","નિંદા કરવી","to criticize","nind","","nindati"],
+    ["जल्प्","","जल्पति","બબડવું, બકવું","to mutter / babble","jalp","","jalpati"],
+    ["शंस्","","शंसति","કહેવું, વખાણવું","to say / praise","śaṃs","","śaṃsati"],
+    ["रक्ष्","","रक्षति","રક્ષવું, રાખવું","to protect / keep","rakṣ","","rakṣati"],
+    ["वाञ्छ्","","वाञ्छति","ઇચ્છવું","to desire","vāñch","","vāñchati"]
+  ],
+  "List 6": [
+    ["क्षि","","क्षयति","નાશ પામવું","to perish / be destroyed","kṣi","","kṣayati"],
+    ["जि","","जयति","જીતવું, હરાવવું","to win / defeat","ji","","jayati"],
+    ["द्रु","","द्रवति","ઓગળવું, દોડવું","to melt / run","dru","","dravati"],
+    ["भू","","भवति","હોવું, થવું","to be / become","bhū","","bhavati"],
+    ["स्वृ","","स्वरति","બોલવું","to speak","svṛ","","svarati"],
+    ["सृ","","सरति","જવું, સરવું","to go / slide","sṛ","","sarati"],
+    ["स्मृ","","स्मरति","યાદ કરવું","to remember","smṛ","","smarati"],
+    ["स्नु","","स्नवति","ટપકવું, વહેવું","to drip / flow","snu","","snavati"],
+    ["तृ","","तरति","તરવું, પાર કરવું","to swim / cross","tṛ","","tarati"],
+    ["ध्यै","","ध्यायति","ધ્યાન કરવું","to meditate","dhyai","","dhyāyati"],
+    ["गै","","गायति","ગાવું","to sing","gai","","gāyati"],
+    ["ग्लै","","ग्लायति","ગ્લાનિ પામવું","to become weary / dejected","glai","","glāyati"],
+    ["म्लै","","म्लायति","કરમાવું","to wither","mlai","","mlāyati"]
+  ],
+  "List 7": [
+    ["स्था","(तिष्ठ)","तिष्ठति","ઊભા રહેવું, રહેવું","to stand / stay","sthā","(tiṣṭha)","tiṣṭhati"],
+    ["गम्","(गच्छ)","गच्छति","જવું, પામવું","to go / attain","gam","(gaccha)","gacchati"],
+    ["ऋ","(ऋच्छ)","ऋच्छति","જવું, પામવું","to go / attain","ṛ","(ṛccha)","ṛcchati"],
+    ["दा","(यच्छ)","यच्छति","આપવું","to give","dā","(yaccha)","yacchati"],
+    ["दृश्","(पश्य)","पश्यति","જોવું","to see","dṛś","(paśya)","paśyati"],
+    ["पा","(पिब)","पिबति","પીવું","to drink","pā","(piba)","pibati"],
+    ["ध्मा","(धम)","धमति","ફૂંકવું, ધમવું","to blow","dhmā","(dhama)","dhamati"],
+    ["घ्रा","(जिघ्र)","जिघ्रति","સૂંઘવું","to smell","ghrā","(jighra)","jighrati"],
+    ["मन्","(मन)","मनति","વિચારવું","to think","man","(mana)","manati"],
+    ["यम्","(यच्छ)","यच्छति","દાબમાં રાખવું, વશ કરવું","to control / restrain","yam","(yaccha)","yacchati"],
+    ["दंश्","(दश)","दशति","ડંખવું, કરડવું","to sting / bite","daṃś","(daśa)","daśati"]
+  ]
+};
+
+const deckKeys = Object.keys(DATA);
+let currentDeckIdx = 0;
+let order = [];
+let cursor = 0;
+let flipped = false;
+let currentMode = 'study'; // 'study' | 'sprint'
+let sprintLang = 'guj'; // 'guj' | 'eng'
+
+/* ---------- Shared elements ---------- */
+const decksEl = document.getElementById('decks');
+const studyModeBtn = document.getElementById('studyModeBtn');
+const sprintModeBtn = document.getElementById('sprintModeBtn');
+const studyView = document.getElementById('studyView');
+const sprintView = document.getElementById('sprintView');
+
+/* ---------- Study mode elements ---------- */
+const deckNameEl = document.getElementById('deckName');
+const progressTextEl = document.getElementById('progressText');
+const progressFillEl = document.getElementById('progressFill');
+const card = document.getElementById('card');
+const frontLabel = document.getElementById('frontLabel');
+const rootText = document.getElementById('rootText');
+const rootAlt = document.getElementById('rootAlt');
+const pronText = document.getElementById('pronText');
+const verbText = document.getElementById('verbText');
+const verbPronText = document.getElementById('verbPronText');
+const verbDivider = document.getElementById('verbDivider');
+const gujText = document.getElementById('gujText');
+const engText = document.getElementById('engText');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const flipBtn = document.getElementById('flipBtn');
+const shuffleBtn = document.getElementById('shuffleBtn');
+const speakFrontBtn = document.getElementById('speakFrontBtn');
+const speakBackBtn = document.getElementById('speakBackBtn');
+
+/* ---------- Sprint mode elements ---------- */
+const langToggle = document.getElementById('langToggle');
+const sprintScoreEl = document.getElementById('sprintScore');
+const sprintStreakEl = document.getElementById('sprintStreak');
+const sprintBestEl = document.getElementById('sprintBest');
+const sprintTimerFill = document.getElementById('sprintTimerFill');
+const sprintDeckLabel = document.getElementById('sprintDeckLabel');
+const sprintWord = document.getElementById('sprintWord');
+const sprintPron = document.getElementById('sprintPron');
+const sprintAnswers = document.getElementById('sprintAnswers');
+
+let currentFrontSpeech = '';
+let currentBackSpeech = '';
+let voicesReady = [];
+
+function loadVoices(){ voicesReady = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; }
+if ('speechSynthesis' in window){ loadVoices(); window.speechSynthesis.onvoiceschanged = loadVoices; }
+
+function pickVoice(){
+  return voicesReady.find(v => v.lang && v.lang.toLowerCase().startsWith('hi'))
+      || voicesReady.find(v => v.lang && v.lang.toLowerCase().startsWith('en'))
+      || voicesReady[0] || null;
+}
+
+function speak(text, btn){
+  if (!text || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  const voice = pickVoice();
+  utter.lang = voice ? voice.lang : 'hi-IN';
+  if (voice) utter.voice = voice;
+  utter.rate = 0.75;
+  utter.pitch = 1;
+  if (btn){
+    btn.classList.add('speaking');
+    utter.onend = () => btn.classList.remove('speaking');
+    utter.onerror = () => btn.classList.remove('speaking');
+  }
+  window.speechSynthesis.speak(utter);
+}
+
+/* ================= DECK CHIPS ================= */
+function buildDecks(){
+  decksEl.innerHTML = '';
+  deckKeys.forEach((key, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'deck-chip' + (i === currentDeckIdx ? ' active' : '');
+    chip.textContent = key.startsWith('List ') ? key.replace('List ', 'L') : key;
+    chip.title = key;
+    chip.addEventListener('click', () => selectDeck(i));
+    decksEl.appendChild(chip);
+  });
+}
+
+function selectDeck(i){
+  currentDeckIdx = i;
+  order = DATA[deckKeys[i]].map((_, idx) => idx);
+  cursor = 0;
+  flipped = false;
+  buildDecks();
+  if (currentMode === 'study') renderStudy();
+  else startSprintRound();
+}
+
+/* ================= STUDY MODE ================= */
+function renderStudy(){
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  const deckName = deckKeys[currentDeckIdx];
+  const entries = DATA[deckName];
+  const entry = entries[order[cursor]];
+  const [root, alt, verb, guj, eng, pronRoot, pronAlt, pronVerb] = entry;
+
+  card.classList.remove('flipped');
+  flipped = false;
+
+  deckNameEl.textContent = deckName;
+  progressTextEl.textContent = (cursor + 1) + ' / ' + entries.length;
+  progressFillEl.style.width = ((cursor + 1) / entries.length * 100) + '%';
+
+  frontLabel.textContent = deckName;
+  rootText.textContent = root;
+  rootAlt.textContent = alt;
+  rootAlt.style.display = alt ? '' : 'none';
+  pronText.textContent = pronAlt ? (pronRoot + ' ' + pronAlt) : pronRoot;
+  verbText.textContent = verb;
+  verbText.style.display = verb ? '' : 'none';
+  verbPronText.textContent = pronVerb;
+  verbPronText.style.display = verb ? '' : 'none';
+  verbDivider.style.display = verb ? '' : 'none';
+  gujText.textContent = guj;
+  engText.textContent = eng;
+
+  currentFrontSpeech = alt ? (root + ', ' + alt.replace(/[()]/g, '')) : root;
+  currentBackSpeech = verb || '';
+  speakBackBtn.style.display = verb ? '' : 'none';
+
+  prevBtn.disabled = cursor === 0;
+  nextBtn.disabled = cursor === entries.length - 1;
+}
+
+function flip(){ flipped = !flipped; card.classList.toggle('flipped', flipped); }
+
+function next(){
+  const entries = DATA[deckKeys[currentDeckIdx]];
+  if (cursor < entries.length - 1){ cursor++; renderStudy(); }
+}
+function prev(){ if (cursor > 0){ cursor--; renderStudy(); } }
+
+function shuffleOrder(){
+  for (let i = order.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  cursor = 0;
+  if (currentMode === 'study') renderStudy();
+}
+
+card.addEventListener('click', flip);
+flipBtn.addEventListener('click', flip);
+prevBtn.addEventListener('click', prev);
+nextBtn.addEventListener('click', next);
+shuffleBtn.addEventListener('click', shuffleOrder);
+speakFrontBtn.addEventListener('click', (e) => { e.stopPropagation(); speak(currentFrontSpeech, speakFrontBtn); });
+speakBackBtn.addEventListener('click', (e) => { e.stopPropagation(); speak(currentBackSpeech, speakBackBtn); });
+
+/* ================= SPRINT MODE (game) ================= */
+let sprintScore = 0;
+let sprintStreak = 0;
+let sprintBest = Number(localStorage.getItem('sanskritSprintBest') || 0);
+let sprintTimer = null;
+let sprintLocked = false;
+let sprintCurrentEntry = null;
+
+sprintBestEl.textContent = sprintBest;
+
+langToggle.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-lang]');
+  if (!btn) return;
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  sprintLang = btn.dataset.lang;
+  startSprintRound();
+});
+
+function shuffleArr(arr){
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function updateSprintStats(){
+  sprintScoreEl.textContent = sprintScore;
+  sprintStreakEl.textContent = sprintStreak;
+  sprintBestEl.textContent = sprintBest;
+}
+
+function startSprintTimer(){
+  clearTimeout(sprintTimer);
+  sprintTimerFill.style.transition = 'none';
+  sprintTimerFill.style.width = '100%';
+  requestAnimationFrame(() => {
+    sprintTimerFill.style.transition = 'width 7s linear';
+    sprintTimerFill.style.width = '0%';
+  });
+  sprintTimer = setTimeout(() => { if (!sprintLocked) handleSprintTimeout(); }, 7000);
+}
+
+function handleSprintTimeout(){
+  sprintLocked = true;
+  sprintStreak = 0;
+  updateSprintStats();
+  revealSprintAnswer(null);
+  setTimeout(startSprintRound, 1100);
+}
+
+function startSprintRound(){
+  clearTimeout(sprintTimer);
+  sprintLocked = false;
+  const deckName = deckKeys[currentDeckIdx];
+  const entries = DATA[deckName];
+  const idx = Math.floor(Math.random() * entries.length);
+  sprintCurrentEntry = entries[idx];
+  const [root, alt, verb, guj, eng, pronRoot] = sprintCurrentEntry;
+
+  sprintDeckLabel.textContent = deckName + ' — what does this mean?';
+  sprintWord.textContent = verb ? (root + (alt ? ' ' + alt : '')) : root;
+  sprintPron.textContent = pronRoot;
+
+  const answerField = sprintLang === 'guj' ? 3 : 4;
+  const correctAnswer = sprintCurrentEntry[answerField];
+  const pool = entries.filter(e => e !== sprintCurrentEntry).map(e => e[answerField]).filter(Boolean);
+  const distractors = shuffleArr(pool).slice(0, 3);
+  const options = shuffleArr([correctAnswer, ...distractors]);
+
+  sprintAnswers.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'sprint-answer-btn';
+    btn.textContent = opt;
+    btn.addEventListener('click', () => handleSprintAnswer(opt));
+    sprintAnswers.appendChild(btn);
+  });
+
+  startSprintTimer();
+}
+
+function handleSprintAnswer(selected){
+  if (sprintLocked) return;
+  sprintLocked = true;
+  clearTimeout(sprintTimer);
+
+  const answerField = sprintLang === 'guj' ? 3 : 4;
+  const correctAnswer = sprintCurrentEntry[answerField];
+  const isCorrect = selected === correctAnswer;
+
+  if (isCorrect){
+    sprintScore += 10 + sprintStreak * 2;
+    sprintStreak += 1;
+    if (sprintScore > sprintBest){
+      sprintBest = sprintScore;
+      localStorage.setItem('sanskritSprintBest', sprintBest);
+    }
+  } else {
+    sprintStreak = 0;
+  }
+  updateSprintStats();
+  revealSprintAnswer(selected);
+  setTimeout(startSprintRound, 1000);
+}
+
+function revealSprintAnswer(selected){
+  const answerField = sprintLang === 'guj' ? 3 : 4;
+  const correctAnswer = sprintCurrentEntry[answerField];
+  [...sprintAnswers.children].forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === correctAnswer) btn.classList.add('correct');
+    else if (btn.textContent === selected) btn.classList.add('wrong');
+  });
+}
+
+/* ================= MODE SWITCHING ================= */
+studyModeBtn.addEventListener('click', () => {
+  currentMode = 'study';
+  studyModeBtn.classList.add('active');
+  sprintModeBtn.classList.remove('active');
+  studyView.classList.remove('hidden');
+  sprintView.classList.add('hidden');
+  clearTimeout(sprintTimer);
+  renderStudy();
+});
+
+sprintModeBtn.addEventListener('click', () => {
+  currentMode = 'sprint';
+  sprintModeBtn.classList.add('active');
+  studyModeBtn.classList.remove('active');
+  sprintView.classList.remove('hidden');
+  studyView.classList.add('hidden');
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  startSprintRound();
+});
+
+/* ================= KEYBOARD (study mode only) ================= */
+document.addEventListener('keydown', (e) => {
+  if (currentMode !== 'study') return;
+  if (e.code === 'Space'){ e.preventDefault(); flip(); }
+  else if (e.code === 'ArrowRight'){ next(); }
+  else if (e.code === 'ArrowLeft'){ prev(); }
+  else if (e.key === 's' || e.key === 'S'){ shuffleOrder(); }
+  else if (e.key === 'p' || e.key === 'P'){
+    speak(flipped ? currentBackSpeech : currentFrontSpeech, flipped ? speakBackBtn : speakFrontBtn);
+  }
+});
+
+/* ================= INIT ================= */
+selectDeck(0);
+</script>
+</body>
+</html>
